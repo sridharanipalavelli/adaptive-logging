@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adaptive-controller
+  namespace: adaptive-logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adaptive-controller
+  template:
+    metadata:
+      labels:
+        app: adaptive-controller
+    spec:
+      containers:
+      - name: adaptive-controller
+        image: ghcr.io/<YOUR_ORG>/adaptive-controller:latest
+        env:
+          - name: PROMETHEUS_URL
+            value: "http://prometheus-server.adaptive-logging.svc.cluster.local:9090"
+          - name: APP_SERVICE_URL
+            value: "http://adaptive-app:5000"
+          - name: CHECK_INTERVAL
+            value: "15"
+          - name: ERROR_RATE_THRESHOLD
+            value: "0.05"

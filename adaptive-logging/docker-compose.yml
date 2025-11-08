@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  adaptive-app:
+    build: ./app
+    ports:
+      - "5000:5000"
+  controller:
+    build: ./controller
+    environment:
+      - PROMETHEUS_URL=http://host.docker.internal:9090
+      - APP_SERVICE_URL=http://adaptive-app:5000
+    depends_on:
+      - adaptive-app

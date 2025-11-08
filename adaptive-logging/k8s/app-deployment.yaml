@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adaptive-app
+  namespace: adaptive-logging
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: adaptive-app
+  template:
+    metadata:
+      labels:
+        app: adaptive-app
+    spec:
+      containers:
+      - name: adaptive-app
+        image: ghcr.io/<YOUR_ORG>/adaptive-app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 20
